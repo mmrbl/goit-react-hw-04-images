@@ -12,3 +12,10 @@ display: grid;
   margin-left: auto;
   margin-right: auto;
 `
+
+export const Wrapper = styled.div`
+  margin: 10px 0;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+`
