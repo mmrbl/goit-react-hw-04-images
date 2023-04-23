@@ -2,7 +2,8 @@
 import { ImageGalleryItemImage, ImageGalleryItemStyle } from './ImageGalleryItem.styled'
 
 function ImageGalleryItem({ data }) {
-  const { webformatURL, largeImageURL, tags } = data
+  // largeImageURL
+  const { webformatURL, tags } = data
   return (
   <ImageGalleryItemStyle>
       <ImageGalleryItemImage src={webformatURL} alt={tags } />
