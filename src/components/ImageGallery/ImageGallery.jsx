@@ -1,9 +1,9 @@
 import axios from 'axios';
 import Button from 'components/Button';
 import ImageGalleryItem from 'components/ImageGalleryItem';
+import Loader from 'components/Loader';
 import PropTypes from 'prop-types';
 import { Component } from 'react';
-import { ThreeDots } from 'react-loader-spinner';
 import { toast, ToastContainer } from 'react-toastify';
 import { ImageGalleryStyle, Wrapper } from './ImageGallery.styled';
 
@@ -26,7 +26,7 @@ export default class ImageGallery extends Component {
 
       this.setState({status: 'pending'})
 
-        axios
+     axios
         .get(URL)
           .then(data => { 
             if (data.data.totalHits === 0) {
@@ -42,6 +42,7 @@ export default class ImageGallery extends Component {
           this.setState({ error: err.message, status: 'rejected'})
           toast.error(`${this.state.error}`)
         })
+       
 
     }
   } 
@@ -59,18 +60,7 @@ export default class ImageGallery extends Component {
     }
 
     if (status === 'pending') {
-      return (
-        <ThreeDots 
-          height="80" 
-          width="80" 
-          radius="9"
-          color="#3f51b5" 
-          ariaLabel="three-dots-loading"
-          wrapperStyle={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
-          wrapperClassName=""
-          visible={true}
-          />
-      )   
+      return <Loader/>
     }
 
     if (status === 'rejected') {
