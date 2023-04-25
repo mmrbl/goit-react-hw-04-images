@@ -1,17 +1,40 @@
-// import PropTypes from 'prop-types'
-
+import { Component } from 'react'
+import { createPortal } from "react-dom"
 import { ModalStyle, Overlay } from "./Modal.styled"
 
-function Modal() {
-  return (
+const modalRoot = document.querySelector('#modal-root')
+
+
+
+
+
+export default class Modal extends Component {
+
+  componentDidMount() { 
+    window.addEventListener('keydown', this.handleKeyDown)
+   }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown',this.handleKeyDown)
+  }
+  
+  handleKeyDown = e => {
+      if (e.code === 'Escape') {
+        this.props.onClose();
+      }
+    }
+  
+
+  render() {
+    const {children} = this.props
+    return createPortal(
     <Overlay>
-  <ModalStyle>
-    <img src="" alt="" />
-  </ModalStyle>
-</Overlay>
+      <ModalStyle>
+        {children}
+      </ModalStyle>
+    </Overlay>,
+    modalRoot
   )
+  }
 }
 
-Modal.propTypes = {}
-
-export default Modal

@@ -28,7 +28,7 @@ export class App extends Component {
       <>
         <Searchbar handleSubmit={this.handleSubmitForm}/>
         <ImageGallery search={this.state.search.trim().toLowerCase()}/>
-        
+        {/* <Modal/> */}
 
       </>
     )

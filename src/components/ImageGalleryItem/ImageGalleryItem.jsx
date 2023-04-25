@@ -1,15 +1,37 @@
+
 // import PropTypes from 'prop-types'
+import Modal from 'components/Modal'
+import { Component } from 'react'
 import { ImageGalleryItemImage, ImageGalleryItemStyle } from './ImageGalleryItem.styled'
 
-function ImageGalleryItem({ data }) {
-  // largeImageURL
-  const { webformatURL, tags } = data
-  return (
-  <ImageGalleryItemStyle>
-      <ImageGalleryItemImage src={webformatURL} alt={tags } />
-    </ImageGalleryItemStyle>
-  )
+export default class ImageGalleryItem extends Component {
+  state = {
+    showModal: false,
+  }
+
+  toggleModal = () => {
+    this.setState(({showModal}) => ({
+      showModal: !showModal,
+    }))
+  }
+
+
+  render() {
+    const { webformatURL, largeImageURL, tags } = this.props.data
+    const {showModal} = this.state
+    return (
+      <>
+        {showModal && <Modal onClose={this.toggleModal}><img src={largeImageURL} alt={tags} onClick={this.toggleModal} /></Modal>}
+        <ImageGalleryItemStyle>
+          <ImageGalleryItemImage src={webformatURL} alt={tags} onClick={this.toggleModal} />
+        </ImageGalleryItemStyle>
+      </>
+
+      
+    )
+  }
 }
+
 
 // ImageGalleryItem.propTypes = {
 //   data: PropTypes.shape({
@@ -19,5 +41,3 @@ function ImageGalleryItem({ data }) {
 //     tags: PropTypes.string.isRequired,
 //   })
 // }
-
-export default ImageGalleryItem
