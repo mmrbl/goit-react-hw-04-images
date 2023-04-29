@@ -21,7 +21,11 @@ export default class ImageGalleryItem extends Component {
     const {showModal} = this.state
     return (
       <>
-        {showModal && <Modal onClose={this.toggleModal}><img src={largeImageURL} alt={tags} onClick={this.toggleModal} /></Modal>}
+        {showModal &&
+          <Modal onClose={this.toggleModal}>
+            <img src={largeImageURL} alt={tags} onClick={this.toggleModal} />
+          </Modal>}
+        
         <ImageGalleryItemStyle>
           <ImageGalleryItemImage src={webformatURL} alt={tags} onClick={this.toggleModal} />
         </ImageGalleryItemStyle>

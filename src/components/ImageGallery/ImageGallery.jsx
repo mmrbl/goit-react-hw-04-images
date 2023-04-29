@@ -16,6 +16,7 @@ export default class ImageGallery extends Component {
     error: null,
     status: 'idle',
     page: 1,
+    per_page: 12,
   };
 
   loadMore = () => {
@@ -29,18 +30,20 @@ export default class ImageGallery extends Component {
     const KEY = '29559865-360b254a5abc6663dbbd46c59'
     const prevReq = prevProps.search;
     const newReq = this.props.search;
+    const {page, per_page} = this.state
 
-    if (prevReq !== newReq || prevState.page !== this.state.page) {
-      const URL = `https://pixabay.com/api/?q=${newReq}&page=${this.state.page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`;
+    if (prevReq !== newReq || prevState.page !== page) {
+      const URL = `https://pixabay.com/api/?q=${newReq}&page=${page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=${per_page}`;
 
-    this.setState({ status: 'pending' });
-    setTimeout(() => { 
+      this.setState({status: 'pending' });
+   
       axios
       .get(URL)
       .then((data) => {
         if (data.data.totalHits === 0) {
           toast.error(`There is no images with "${newReq}" tags.`);
-          this.setState({ data: [], status: 'idle' });
+          this.setState({status: 'idle'})
+          return data
         } else {
           this.setState((prevState) => ({
             data: prevState.data.concat(data.data.hits),
@@ -54,14 +57,13 @@ export default class ImageGallery extends Component {
         this.setState({ error: err.message, status: 'rejected' });
         toast.error(`${this.state.error}`);
       })
-     }, 1000)
     }
   }
 
   
 
   render() {
-    const { data, totalHits, status, error } = this.state;
+    const { data, totalHits, status, error, per_page } = this.state;
 
     if (status === 'idle') {
       return (
@@ -76,7 +78,7 @@ export default class ImageGallery extends Component {
       return <ToastContainer autoClose={3000} />;
     }
 
-    if (status === 'resolved') {
+    if (data.length > 0) { 
       return (
         <Wrapper>
           <ImageGalleryStyle>
@@ -84,9 +86,11 @@ export default class ImageGallery extends Component {
               return <ImageGalleryItem key={hit.id} data={hit} />;
             })}
           </ImageGalleryStyle>
-          {Number(totalHits) > 12 && (
+
+           {Number(totalHits) > 12 && status !== 'pending'? (
             <Button onLoadMore={this.loadMore} />
-          )}
+          ) : <Loader/>}
+
         </Wrapper>
       );
     }
