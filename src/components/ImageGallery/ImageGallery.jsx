@@ -27,23 +27,32 @@ export default class ImageGallery extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const KEY = '29559865-360b254a5abc6663dbbd46c59'
     const prevReq = prevProps.search;
-    const newReq = this.props.search;
+    const search = this.props.search;
+
+    if (prevReq !== search) {
+      this.setState({data: [], page: 1, status: 'pending'});
+      
+      this.fetchImages()
+    } else if (prevState.page !== this.state.page) {
+      this.setState({ status: 'pending' });
+      
+      this.fetchImages()
+    }
+  }
+
+  fetchImages = () => {
+    const KEY = '29559865-360b254a5abc6663dbbd46c59'
+    const search = this.props.search;
     let { page, per_page } = this.state
-
-    if (prevReq !== newReq || prevState.page !== page) {
-      this.setState({status: 'pending'});
-      
-      const URL = `https://pixabay.com/api/?q=${newReq}&page=${page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=${per_page}`;
-
-      
+    
+      const URL = `https://pixabay.com/api/?q=${search}&page=${page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=${per_page}`;
    
       axios
       .get(URL)
       .then((data) => {
         if (data.data.totalHits === 0) {
-          toast.error(`There is no images with "${newReq}" tags.`);
+          toast.error(`There is no images with "${search}" tags.`);
           this.setState({status: 'idle'})
           return data
         } else {
@@ -59,10 +68,8 @@ export default class ImageGallery extends Component {
         this.setState({ error: err.message, status: 'rejected' });
         toast.error(`${this.state.error}`);
       })
+      
     }
-  }
-
-  
 
   render() {
     const { data, totalHits, status, error, per_page } = this.state;
@@ -91,7 +98,7 @@ export default class ImageGallery extends Component {
 
            {Number(totalHits) > per_page && status !== 'pending'? (
             <Button onLoadMore={this.loadMore} />
-          ) : <Loader/>}
+          ) : null}
 
         </Wrapper>
       );
