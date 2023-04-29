@@ -42,7 +42,7 @@ export default class ImageGallery extends Component {
     
       const URL = `https://pixabay.com/api/?q=${search}&page=${page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=${per_page}`;
    
-    setTimeout(() => { axios
+    axios
       .get(URL)
       .then((data) => {
         if (data.data.totalHits === 0) {
@@ -61,7 +61,7 @@ export default class ImageGallery extends Component {
         console.log(err);
         this.setState({ error: err.message, status: 'rejected' });
         toast.error(`${this.state.error}`);
-      })}, 1000)
+      })
       
       
   }
