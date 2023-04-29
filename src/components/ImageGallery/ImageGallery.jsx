@@ -19,12 +19,6 @@ export default class ImageGallery extends Component {
     per_page: 12,
   };
 
-  loadMore = () => {
-    this.setState((prevState) => ({
-      page: prevState.page + 1,
-      status: 'pending'
-    }))
-  }
 
   componentDidUpdate(prevProps, prevState) {
     const prevReq = prevProps.search;
@@ -48,7 +42,7 @@ export default class ImageGallery extends Component {
     
       const URL = `https://pixabay.com/api/?q=${search}&page=${page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=${per_page}`;
    
-      axios
+    setTimeout(() => { axios
       .get(URL)
       .then((data) => {
         if (data.data.totalHits === 0) {
@@ -67,12 +61,26 @@ export default class ImageGallery extends Component {
         console.log(err);
         this.setState({ error: err.message, status: 'rejected' });
         toast.error(`${this.state.error}`);
-      })
+      })}, 1000)
       
-    }
+      
+  }
+  
+  loadMore = () => {
+    this.setState((prevState) => ({
+      status: 'pending',
+      page: prevState.page + 1,
+
+    }))
+  }
+
+  isMorePages = (total, page, per_page) => {
+    return page*per_page < total
+  }
 
   render() {
-    const { data, totalHits, status, error, per_page } = this.state;
+    const { data, totalHits, status, error, per_page, page } = this.state;
+    const isMorePages = this.isMorePages(totalHits, page, per_page)
 
     if (status === 'idle') {
       return (
@@ -96,9 +104,15 @@ export default class ImageGallery extends Component {
             })}
           </ImageGalleryStyle>
 
-           {Number(totalHits) > per_page && status !== 'pending'? (
-            <Button onLoadMore={this.loadMore} />
-          ) : null}
+          {isMorePages && status !== 'pending' ?
+            (<Button onLoadMore={this.loadMore} />) 
+            : null
+          }
+
+          {!isMorePages ?
+            (<p>No more images with your tags :c</p>)
+          : (status === "pending" ? (<Loader/>) : null)
+          }
 
         </Wrapper>
       );

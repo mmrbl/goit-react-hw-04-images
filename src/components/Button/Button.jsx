@@ -8,7 +8,7 @@ function Button({onLoadMore}) {
 }
 
 Button.propTypes = {
-  onLoadMore: PropTypes.func
+  onLoadMore: PropTypes.func.isRequired
 }
 
 export default Button

@@ -14,8 +14,7 @@ import Searchbar from './Searchbar';
 
 export class App extends Component {
   state = {
-    search: '',
-    status: ''
+    search: ''
   }
 
   handleSubmitForm = (search) => {
