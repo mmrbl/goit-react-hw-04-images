@@ -30,12 +30,14 @@ export default class ImageGallery extends Component {
     const KEY = '29559865-360b254a5abc6663dbbd46c59'
     const prevReq = prevProps.search;
     const newReq = this.props.search;
-    const {page, per_page} = this.state
+    let { page, per_page } = this.state
 
     if (prevReq !== newReq || prevState.page !== page) {
+      this.setState({status: 'pending'});
+      
       const URL = `https://pixabay.com/api/?q=${newReq}&page=${page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=${per_page}`;
 
-      this.setState({status: 'pending' });
+      
    
       axios
       .get(URL)
@@ -87,7 +89,7 @@ export default class ImageGallery extends Component {
             })}
           </ImageGalleryStyle>
 
-           {Number(totalHits) > 12 && status !== 'pending'? (
+           {Number(totalHits) > per_page && status !== 'pending'? (
             <Button onLoadMore={this.loadMore} />
           ) : <Loader/>}
 
