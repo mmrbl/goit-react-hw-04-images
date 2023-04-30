@@ -18,4 +18,8 @@ export const Wrapper = styled.div`
   text-align: center;
   justify-content: center;
   align-items: center;
+
+  h1, p{
+    user-select: none;
+  }
 `

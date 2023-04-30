@@ -17,7 +17,7 @@ export default class ImageGallery extends Component {
     status: 'idle',
     page: 1,
     per_page: 12,
-  };
+  }; 
 
 
   componentDidUpdate(prevProps, prevState) {
@@ -41,7 +41,7 @@ export default class ImageGallery extends Component {
     let { page, per_page } = this.state
     
       const URL = `https://pixabay.com/api/?q=${search}&page=${page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=${per_page}`;
-   
+    
     axios
       .get(URL)
       .then((data) => {
@@ -74,13 +74,14 @@ export default class ImageGallery extends Component {
     }))
   }
 
-  isMorePages = (total, page, per_page) => {
-    return page*per_page < total
+  isMorePages = () => {
+    const { totalHits, per_page, page } = this.state
+    return page*per_page < totalHits
   }
 
   render() {
-    const { data, totalHits, status, error, per_page, page } = this.state;
-    const isMorePages = this.isMorePages(totalHits, page, per_page)
+    const { data, status, error } = this.state;
+    const isMorePages = this.isMorePages()
 
     if (status === 'idle') {
       return (
