@@ -20,7 +20,7 @@ export default function ImageGalleryItem({ data }) {
       <>
         {showModal &&
           <Modal onClose={toggleModal}>
-            <img src={largeImageURL} alt={tags} onClick={this.toggleModal} />
+            <img src={largeImageURL} alt={tags} onClick={toggleModal} />
           </Modal>}
         
         <ImageGalleryItemStyle>
@@ -33,9 +33,5 @@ export default function ImageGalleryItem({ data }) {
 }
 
 ImageGalleryItem.propTypes = {
-  data: PropTypes.shape({
-    webformatURL: PropTypes.string,
-    largeImageURL: PropTypes.string,
-    tags: PropTypes.string.isRequired,
-  })
+  data: PropTypes.object.isRequired
 }
