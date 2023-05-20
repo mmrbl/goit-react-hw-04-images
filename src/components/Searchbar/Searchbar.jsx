@@ -1,4 +1,4 @@
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
 import { toast, ToastContainer } from 'react-toastify';
@@ -54,5 +54,6 @@ function onInputChange(e) {
 
 
 
-
-
+Searchbar.propTypes = {
+  handleSubmit: PropTypes.func.isRequired
+}
