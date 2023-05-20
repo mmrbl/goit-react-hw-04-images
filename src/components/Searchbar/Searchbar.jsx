@@ -1,45 +1,44 @@
-import PropTypes from 'prop-types';
-import { Component } from 'react';
+// import PropTypes from 'prop-types';
+import { useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { SearchbarStyle, SearchForm, SearchFormButton, SearchFormButtonLabel } from './Searchbar.styled';
 
 
-export default class Searchbar extends Component {
-  state = {
-    searchItems: ''
-  }
 
-  onSubmitForm = e => {
+export default function Searchbar({handleSubmit}) {
+  const [searchItems, setSearchItems] = useState('')
+
+  function onSubmitForm(e) {
     e.preventDefault()
 
-    if (this.state.searchItems.trim().toLowerCase() === '') {
+    if (searchItems.trim().toLowerCase() === '') {
       toast.error('Describe the images you want to see!')
       return
     }
 
-    this.props.handleSubmit(this.state.searchItems)
-    this.setState({searchItems: ''})
+    handleSubmit(searchItems)
+    setSearchItems('')
   }
 
-  onInputChange = (e) => {
-    this.setState({ [e.currentTarget.name]: e.currentTarget.value})
-  }
+function onInputChange(e) {
+  setSearchItems(e.target.value)
+}
 
-  render() {
-    return (
-<SearchbarStyle>
-  <SearchForm htmlFor='searchItems' onSubmit={this.onSubmitForm}>
+
+  return (
+    <SearchbarStyle>
+    <SearchForm htmlFor='searchItems' onSubmit={onSubmitForm}>
     <SearchFormButton type="submit" >
           <FiSearch/>
       <SearchFormButtonLabel>Search</SearchFormButtonLabel>
     </SearchFormButton>
 
     <input
-      onChange={this.onInputChange}
+      onChange={onInputChange}
       name='searchItems'
-      value={this.state.searchItems}
+      value={searchItems}
       type="text"
       autoComplete="off"
       autoFocus
@@ -51,11 +50,6 @@ export default class Searchbar extends Component {
       
       
     )
-  }
-}
-
-Searchbar.propTypes = {
-  handleSubmit: PropTypes.func
 }
 
 
